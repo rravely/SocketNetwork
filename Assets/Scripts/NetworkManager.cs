@@ -7,26 +7,29 @@ using System.Text;
 
 public class NetworkManager : MonoBehaviour
 {
+    string serverIP = "192.168.10.241";
+    int port = 9999;
+
     private Socket udpSocket;
     private IPEndPoint remoteEndPoint;
+
+    bool isSending = false;
 
     void Start()
     {
         udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        remoteEndPoint = new IPEndPoint(IPAddress.Parse("192.168.10.241"), 9999);
-
-        StartCoroutine(SendData());
+        remoteEndPoint = new IPEndPoint(IPAddress.Parse(serverIP), port);
     }
 
-    IEnumerator SendData()
+    public void StartSendingVideo()
     {
-        while (true)
-        {
-            byte[] data = Encoding.UTF8.GetBytes("Hello from Unity");
-            udpSocket.SendTo(data, remoteEndPoint);
+        byte[] data = Encoding.UTF8.GetBytes("Hello from Unity");
+        udpSocket.SendTo(data, remoteEndPoint);
+    }
 
-            yield return new WaitForSeconds(1f);
-        }
+    public void QuitSendingVideo()
+    {
+
     }
 
     private void OnApplicationQuit()
